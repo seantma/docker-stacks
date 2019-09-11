@@ -35,6 +35,9 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     fonts-dejavu \
+    unixodbc \
+    unixodbc-dev \
+    r-cran-rodbc \
     gfortran \
     gcc && \
     rm -rf /var/lib/apt/lists/* 
@@ -117,6 +120,7 @@ RUN conda install --quiet --yes \
     'r-htmlwidgets=1.3*' \
     'r-irkernel=1.0*' \
     'r-nycflights13=1.0*' \
+    'r-rodbc=1.3*' \
     'r-plyr=1.8*' \
     'r-randomforest=4.6*' \
     'r-rcurl=1.95*' \
@@ -127,6 +131,7 @@ RUN conda install --quiet --yes \
     'r-sparklyr=1.0*' \
     'r-tidyverse=1.2*' \
     'rpy2=2.9*' \
+    'unixodbc=2.3.*' \
     && \
     conda clean --all -f -y && \
     fix-permissions $CONDA_DIR && \
