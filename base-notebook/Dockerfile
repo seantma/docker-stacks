@@ -77,14 +77,6 @@ WORKDIR $HOME
 RUN mkdir /home/$NB_USER/work && \
     fix-permissions /home/$NB_USER
 
-# R pre-requisites
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    fonts-dejavu \
-    gfortran \
-    gcc && \
-    rm -rf /var/lib/apt/lists/*
-
 # Install conda as jovyan and check the md5 sum provided on the download site
 ENV MINICONDA_VERSION=4.6.14 \
     CONDA_VERSION=4.7.10
@@ -109,6 +101,33 @@ RUN cd /tmp && \
 # Install Tini
 RUN conda install --quiet --yes 'tini=0.18.0' && \
     conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
+    conda clean --all -f -y && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+# R packages including IRKernel which gets installed globally.
+RUN conda install --quiet --yes \
+    'r-base=3.6.1' \
+    'r-caret=6.0*' \
+    'r-crayon=1.3*' \
+    'r-devtools=2.1*' \
+    'r-forecast=8.7*' \
+    'r-hexbin=1.27*' \
+    'r-htmltools=0.3*' \
+    'r-htmlwidgets=1.3*' \
+    'r-irkernel=1.0*' \
+    'r-nycflights13=1.0*' \
+    'r-plyr=1.8*' \
+    'r-randomforest=4.6*' \
+    'r-rcurl=1.95*' \
+    'r-reshape2=1.4*' \
+    'r-rmarkdown=1.14*' \
+    'r-rsqlite=2.1*' \
+    'r-shiny=1.3*' \
+    'r-sparklyr=1.0*' \
+    'r-tidyverse=1.2*' \
+    'rpy2=2.9*' \
+    && \
     conda clean --all -f -y && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
